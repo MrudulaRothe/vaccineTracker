@@ -6,7 +6,7 @@ import InfoBox from './InfoBox';
 
 import Table2 from './Table2'
 import Loader from './Loader';
-
+import { sortData, prettyPrintStat } from "./util2";
 import Map2 from './Map2'
 import "leaflet/dist/leaflet.css";
 
@@ -23,7 +23,7 @@ function India() {
     const[loading,setLoading]= useState(true);
     const [mapCenter, setMapCenter] = useState({ lat: 20.593684, lng: 78.96288 });
     const [mapZoom, setMapZoom] = useState(4);
-    
+    const [casesType, setCasesType] = useState("confirmed");
     const [mapStates, setMapStates] = useState([]);
 
 // UseEffects:-
@@ -35,6 +35,7 @@ function India() {
         .then((data) => {
             
             setStateInfo(data);
+            
             setLoading(false)
         });
         
@@ -58,9 +59,10 @@ function India() {
                  ) );
                   
                 setTableData(data.data.statewise);
-                
+                // setMapStates(data);
+                // console.log(mapStates)
                 console.log(data)
-                setMapStates(data); 
+                
                 setStates(states);
             });
             
@@ -80,13 +82,15 @@ function India() {
         .then((response) => response.json())
         .then((data) => {
       
-            setState(stateCode);
+            
             setStateInfo(data);
+            console.log("data",data);
+            console.log("stateinfo",stateInfo) // 
             
-            setLoading(false);
-            
-            setMapCenter([stateInfo.data[0].latitude, stateInfo.data[0].longitude]);
+            setMapStates([data.data[0]]); 
+            setMapCenter([data.data[0].latitude, data.data[0].longitude]);
             setMapZoom(6);
+            setLoading(false);
             // setStateInfo(stateInfo)
         });
      
@@ -131,33 +135,33 @@ function India() {
             <div className="india__stats">
             
             <InfoBox
-            // isRed
-            // active={casesType === "cases"}
-            // onClick={(e) => setCasesType("cases")} 
-            title="CoronaVirus Cases" 
+            isRed
+            active={casesType === "confirmed"}
+            onClick={(e) => setCasesType("confirmed")} 
+            title="Cases" 
             // cases={stateInfo.map((location) => (
             //     {locationconfirmedCase}
             // ))} 
             // cases = {456}
-            cases={stateInfo.data[0].confirmed}
+            cases={prettyPrintStat(stateInfo.data[0].confirmed)}
 
             />
             <InfoBox
-            // active={casesType === "recovered"}
-            // onClick={(e) => setCasesType("recovered")}  
+            active={casesType === "recovered"}
+            onClick={(e) => setCasesType("recovered")}  
             title="Recovered" 
             // cases={1234} 
-            cases={stateInfo.data[0].recovered}
+            cases={prettyPrintStat(stateInfo.data[0].recovered)}
             // total={1234}
 
             />
             <InfoBox 
-            // isRed
-            // active={casesType === "deaths"}
-            // onClick={(e) => setCasesType("deaths")} 
+            isRed
+            active={casesType === "dead"}
+            onClick={(e) => setCasesType("dead")} 
             title="Deaths" 
             // cases={234} 
-            cases={stateInfo.data[0].dead}
+            cases={prettyPrintStat(stateInfo.data[0].dead)}
 
             />
                       {/* InfoBoxes */}
@@ -170,6 +174,7 @@ function India() {
            
                 {/* Map */}
             <Map2 
+                casesType={casesType}
                 states={mapStates}
                 center={mapCenter}
                 zoom={mapZoom}
