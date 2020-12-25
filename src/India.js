@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import './India.css';
-import { FormControl, Select, MenuItem, Card, CardContent } from '@material-ui/core';
+import { FormControl, Select, MenuItem, Card, CardContent, Button } from '@material-ui/core';
 import Navbar from './components/Navbar';
 import InfoBox from './InfoBox';
 
@@ -9,7 +9,7 @@ import Loader from './Loader';
 import { sortData, prettyPrintStat } from "./util2";
 import Map2 from './Map2'
 import "leaflet/dist/leaflet.css";
-
+import {useHistory} from 'react-router-dom';
 
 
 function India() {
@@ -25,6 +25,7 @@ function India() {
     const [mapZoom, setMapZoom] = useState(4);
     const [casesType, setCasesType] = useState("confirmed");
     const [mapStates, setMapStates] = useState([]);
+  
 
 // UseEffects:-
 
@@ -96,10 +97,13 @@ function India() {
      
         };
         // console.log("state info", stateInfo );
+        const history = useHistory();
 
         if(loading){
             return <Loader />
         }
+
+        
 
         return (
         <div className="india">
@@ -130,6 +134,18 @@ function India() {
             
                 </Select>  
             </FormControl>
+            <Button variant="contained" color="secondary"  onClick={() => history.push('/Prediction')}>
+                Prediction
+            </Button>
+            <Button variant="contained" color="primary" onClick={() => history.push('/Quarantine')}>
+                Quarantine
+            </Button>
+            <Button variant="contained" color="primary" onClick={() => history.push('/Treatment')}>
+                Treatment
+            </Button>
+            <Button variant="contained" color="primary" onClick={() => history.push('/Rules')}>
+                Rules
+            </Button>
 
             </div>
             <div className="india__stats">

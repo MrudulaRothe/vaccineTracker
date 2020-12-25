@@ -7,6 +7,7 @@ import Error from './Error';
 import Quarantine from './pages/Quarantine';
 import Treatment from './pages/Treatment';
 import Rules from './pages/Rules'
+import Prediction from './pages/Prediction'
 
 import India from './India';
 
@@ -20,7 +21,7 @@ function Main() {
           <Route path='/quarantine' exact component={Quarantine} />
               <Route path='/rules' exact component={Rules} />
               <Route path='/treatment' exact component={Treatment} />
-
+              <Route path ='/prediction' exact component={Prediction} />
           <Route component={Error} />
         </Switch>
     </div>
